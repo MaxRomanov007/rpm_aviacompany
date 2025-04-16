@@ -17,9 +17,7 @@ public partial class AddUserWindow : Window
     {
         InitializeComponent();
 
-        BirthDayDatePicker.MaxYear = new DateTimeOffset(new DateTime().AddYears(-18));
-
-        _user.Birthdate = new DateTimeOffset(DateTime.Now.AddYears(-20));
+        _user.Birthdate = new DateTimeOffset(DateTime.Now.AddYears(-18));
         DataContext = _user;
 
         OfficesComboBox.ItemsSource = OfficeStorage.GetOffices();
