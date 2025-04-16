@@ -1,0 +1,106 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:models="clr-namespace:App.Domain.Models"
+        xmlns:models1="clr-namespace:Database.Database.Models;assembly=Database"
+        mc:Ignorable="d" d:DesignWidth="430" d:DesignHeight="300"
+        Width="430" Height="300"
+        CanResize="False"
+        WindowStartupLocation="CenterOwner"
+        x:Class="App.Windows.AddUserWindow"
+        x:DataType="models:User"
+        Title="AddUserWindow">
+    <Window.Styles>
+        <Style Selector="TextBox, ComboBox">
+            <Setter Property="Width" Value="300" />
+        </Style>
+
+        <Style Selector="Button">
+            <Setter Property="Width" Value="150" />
+        </Style>
+    </Window.Styles>
+
+    <Grid
+        RowDefinitions="*,Auto,Auto,Auto,Auto,Auto,Auto,Auto,*"
+        ColumnDefinitions="*, Auto, Auto, *">
+
+        <Label
+            Grid.Row="1"
+            Grid.Column="1"
+            Content="Email Address" />
+        <TextBox
+            Grid.Row="1"
+            Grid.Column="2"
+            Text="{Binding Email}" />
+
+        <Label
+            Grid.Row="2"
+            Grid.Column="1"
+            Content="First Name" />
+        <TextBox
+            Grid.Row="2"
+            Grid.Column="2"
+            Text="{Binding FirstName}" />
+
+        <Label
+            Grid.Row="3"
+            Grid.Column="1"
+            Content="Last Name" />
+        <TextBox
+            Grid.Row="3"
+            Grid.Column="2"
+            Text="{Binding LastName}" />
+
+        <Label
+            Grid.Row="4"
+            Grid.Column="1"
+            Content="Office" />
+        <ComboBox
+            x:Name="OfficesComboBox"
+            Grid.Row="4"
+            Grid.Column="2"
+            SelectedItem="{Binding Office}">
+
+            <ComboBox.ItemTemplate>
+                <DataTemplate x:DataType="models1:Office">
+                    <TextBlock Text="{Binding Title}" />
+                </DataTemplate>
+            </ComboBox.ItemTemplate>
+        </ComboBox>
+
+        <Label
+            Grid.Row="5"
+            Grid.Column="1"
+            Content="Birthday" />
+        <DatePicker
+            x:Name="BirthDayDatePicker"
+            Grid.Row="5"
+            Grid.Column="2"
+            SelectedDate="{Binding Birthdate}" />
+
+        <Label
+            Grid.Row="6"
+            Grid.Column="1"
+            Content="Password" />
+        <TextBox
+            Grid.Row="6"
+            Grid.Column="2"
+            Text="{Binding Password}" />
+
+        <StackPanel
+            Grid.Row="7"
+            Grid.Column="1"
+            Grid.ColumnSpan="2"
+            HorizontalAlignment="Center"
+            Orientation="Horizontal">
+
+            <Button
+                Content="Save"
+                Click="SaveButton_OnClick" />
+            <Button
+                Content="Cancel"
+                Click="CancelButton_OnClick" />
+        </StackPanel>
+    </Grid>
+</Window>

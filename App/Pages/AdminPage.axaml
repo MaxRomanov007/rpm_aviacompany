@@ -1,0 +1,66 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:models="clr-namespace:Database.Database.Models;assembly=Database"
+             mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
+             x:Class="App.Pages.AdminPage">
+    <Grid RowDefinitions="Auto, Auto, *, Auto">
+        <StackPanel
+            Grid.Row="0"
+            HorizontalAlignment="Stretch"
+            Orientation="Horizontal"
+            Spacing="5"
+            Background="{DynamicResource SystemBaseLowColor}">
+
+            <HyperlinkButton
+                Content="Add user"
+                Click="AddUserButton_OnClick" />
+            <HyperlinkButton
+                Content="Exit"
+                Click="ExitButton_OnClick" />
+        </StackPanel>
+
+        <StackPanel
+            Grid.Row="1"
+            Orientation="Horizontal">
+
+            <Label Content="Office:" />
+            <ComboBox
+                x:Name="OfficesComboBox"
+                Width="200"
+                SelectionChanged="OfficesComboBox_OnSelectionChanged">
+
+                <ComboBox.ItemTemplate>
+                    <DataTemplate x:DataType="models:Office">
+                        <TextBlock Text="{Binding Title}" />
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+            </ComboBox>
+        </StackPanel>
+
+        <DataGrid
+            x:Name="UsersDataGrid"
+            Grid.Row="2"
+
+            x:DataType="models:User">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Name" Binding="{Binding FirstName}" />
+                <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}" />
+                <DataGridTextColumn Header="Age" Binding="{Binding Age}" />
+                <DataGridTextColumn Header="User Role" Binding="{Binding Role.Title}" />
+                <DataGridTextColumn Header="Email Address" Binding="{Binding Email}" />
+                <DataGridTextColumn Header="Office" Binding="{Binding OfficeString}" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel
+            Grid.Row="3"
+            Orientation="Horizontal">
+
+            <Button Content="Change Role" />
+            <Button Content="Enable/Disable Login" />
+        </StackPanel>
+    </Grid>
+</UserControl>
