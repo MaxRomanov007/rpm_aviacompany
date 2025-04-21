@@ -10,7 +10,7 @@ public static class UserStorage
     {
         await using var ctx = new AviaContext();
 
-        return ctx.Users.Include(u => u.Role).FirstOrDefault(u => u.Email == email);
+        return await ctx.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Email == email);
     }
 
     public static List<User> GetUsersByOfficeId(int officeId)

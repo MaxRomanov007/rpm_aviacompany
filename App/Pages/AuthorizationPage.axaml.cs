@@ -7,6 +7,7 @@ using Avalonia.Controls;
 using Avalonia.Interactivity;
 using Database.Database.Models;
 using Database.Services;
+using Microsoft.Data.SqlClient;
 
 namespace App.Pages;
 
@@ -23,6 +24,8 @@ public partial class AuthorizationPage : UserControl
         var email = EmailTextBox.Text ?? string.Empty;
         var password = PasswordTextBox.Text ?? string.Empty;
 
+        LoginButton.IsEnabled = false;
+
         User user;
         try
         {
@@ -37,6 +40,20 @@ public partial class AuthorizationPage : UserControl
         {
             await Dialogs.ShowErrorAsync("Вы заблокированы");
             return;
+        }
+        catch (SqlException)
+        {
+            await Dialogs.ShowErrorAsync("Ошибка базы данных");
+            return;
+        }
+        catch (Exception ex)
+        {
+            await Dialogs.ShowErrorAsync($"Неизвестная ошибка: {ex.Message}");
+            return;
+        }
+        finally
+        {
+            LoginButton.IsEnabled = true;
         }
 
         if (user.Role.Title == Role.Administrator)

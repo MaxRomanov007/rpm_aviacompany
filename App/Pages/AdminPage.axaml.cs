@@ -1,6 +1,10 @@
+using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Threading.Tasks;
 using App.Domain.Static;
+using App.Domain.Utils;
 using App.Windows;
 using Avalonia.Controls;
 using Avalonia.Interactivity;
@@ -15,7 +19,17 @@ public partial class AdminPage : UserControl
     public AdminPage()
     {
         InitializeComponent();
-        var offices = OfficeStorage.GetOffices();
+
+        List<Office> offices;
+        try
+        {
+            offices = OfficeStorage.GetOffices();
+        }
+        catch (Exception ex)
+        {
+            Dialogs.ShowErrorAsync($"Неизвестная ошибка: {ex.Message}");
+            return;
+        }
 
         OfficesComboBox.ItemsSource = offices.Prepend(new Office
         {
@@ -23,18 +37,34 @@ public partial class AdminPage : UserControl
         });
         OfficesComboBox.SelectedIndex = 0;
 
-        UsersDataGrid.ItemsSource = UserStorage.GetUsersByOfficeId(0);
+        try
+        {
+            UsersDataGrid.ItemsSource = UserStorage.GetUsersByOfficeId(0);
+        }
+        catch (Exception ex)
+        {
+            Dialogs.ShowErrorAsync($"Неизвестная ошибка: {ex.Message}");
+            return;
+        }
     }
 
     [SuppressMessage("ReSharper", "UnusedParameter.Local")]
-    private void OfficesComboBox_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
+    private async void OfficesComboBox_OnSelectionChanged(object? sender, SelectionChangedEventArgs e)
     {
         if (sender is not ComboBox { SelectedItem: Office office })
         {
             return;
         }
 
-        UsersDataGrid.ItemsSource = UserStorage.GetUsersByOfficeId(office.Id);
+        try
+        {
+            UsersDataGrid.ItemsSource = UserStorage.GetUsersByOfficeId(office.Id);
+        }
+        catch (Exception ex)
+        {
+            await Dialogs.ShowErrorAsync($"Неизвестная ошибка: {ex.Message}");
+            return;
+        }
     }
 
     [SuppressMessage("ReSharper", "UnusedParameter.Local")]
@@ -51,9 +81,16 @@ public partial class AdminPage : UserControl
 
         var result = await dialog.ShowDialog<bool>(window);
 
-        if (result)
+        if (!result) return;
+
+        try
         {
             UsersDataGrid.ItemsSource = UserStorage.GetUsersByOfficeId(office.Id);
+        }
+        catch (Exception ex)
+        {
+            await Dialogs.ShowErrorAsync($"Неизвестная ошибка: {ex.Message}");
+            return;
         }
     }
 

@@ -20,8 +20,16 @@ public partial class AddUserWindow : Window
         _user.Birthdate = new DateTimeOffset(DateTime.Now.AddYears(-18));
         DataContext = _user;
 
-        OfficesComboBox.ItemsSource = OfficeStorage.GetOffices();
-        OfficesComboBox.SelectedIndex = 0;
+        try
+        {
+            OfficesComboBox.ItemsSource = OfficeStorage.GetOffices();
+            OfficesComboBox.SelectedIndex = 0;
+        }
+        catch (Exception ex)
+        {
+            Dialogs.ShowErrorAsync($"Неизвестная ошибка: {ex.Message}");
+            return;
+        }
     }
 
     [SuppressMessage("ReSharper", "UnusedParameter.Local")]
